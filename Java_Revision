@@ -1,0 +1,167 @@
+package com.company;
+
+import java.util.Scanner;
+
+public class Main
+{
+    public static int roundNumber(int roundNo)
+    {
+        for (roundNo=1;roundNo<5;roundNo++)
+        {
+
+        }
+        return roundNo;
+    }
+
+    public static int getRandomNumber()                         // gets a random number and returns it
+    {
+        int rando = (int)(Math.random()*10) + 1;
+        return rando;
+    }
+
+    public static int calcTotal(int card1, int card2)           // adds initial cards together and returns the total value
+    {
+        return (card1+card2);
+    }
+
+    public static boolean getResult(int total, int house)       //  checks if house has won
+    {
+        if (total > house && total <= 21)
+        {
+            return(true);
+        }
+        else
+        {
+            return(false);
+        }
+    }
+
+    public static boolean busted(int total)                     // checks if player is bust
+    {
+        if (total>21)
+        {
+            return(true);
+        }
+        else
+        {
+            return(false);
+        }
+    }
+
+    public static int houseTotal(int x)                         // calculates house total
+    {
+        int house = 0;
+        while (house < x)
+            house = calcTotal(getRandomNumber(),getRandomNumber());
+        return(house);
+    }
+
+    public static void displayCards(int cardsDrawn[])           // Lists all the cards drawn by the player
+    {
+        System.out.print("Cards drawn: ");
+        for (int x=1; x<10; x++)
+        {
+            if (cardsDrawn[x]!=0)
+            {
+                if (x==1)
+                {
+                    System.out.print(cardsDrawn[x]);
+                }
+                else
+                {
+                    System.out.print(", "+cardsDrawn[x]);
+                }
+            }               // end of if
+        }                   // end of for
+        System.out.println();
+    }                       //end of displayCards
+
+    public static void main(String[] args)
+    {
+        Scanner kboard = new Scanner(System.in);
+        final int houseMin = 16;                                // house minimum value before having to stand
+        String choice;
+        int cardsDrawn[] = new int[10];                         // maximum card draw set to 5
+        int card1;
+        int card2;
+        int house=0;                                            // Initialise "house" variable
+        int cardValue=0;
+        int cardCount=3;                                        // why set to 3?
+
+        int total;
+
+        house = houseTotal(houseMin);
+        cardsDrawn[0] = house;
+        card1 = getRandomNumber();
+        cardsDrawn[1] = card1;
+        card2 = getRandomNumber();
+        cardsDrawn[2] = card2;
+
+        int roundNo=0;
+
+        total = calcTotal(card1,card2);
+        System.out.println("You have drawn "+card1+" and "+card2);
+        System.out.println("Your total is currently: " + total);
+        System.out.println("Do you wish to draw another card y/n");
+        choice=kboard.nextLine();
+
+        while (choice.equalsIgnoreCase("y"))
+        {
+            cardValue=getRandomNumber();
+            cardsDrawn[cardCount++] = cardValue;              // wtf is this doing?
+            System.out.println("You have drawn a "+ cardValue);
+            total=calcTotal(total,cardValue);
+            System.out.println("Your total is currently: " + total);
+
+            if (busted(total)==true)
+            {
+                System.out.println("Busted your cards total "+total+" which is over 21");
+                displayCards(cardsDrawn);
+            }
+            else
+            {
+                System.out.println("Do you wish to draw another card? y/n");
+                choice =kboard.nextLine();
+            }
+        }
+
+        if (getResult(total,house)==true)
+        {
+            System.out.println("You have won with a total of "+total+" while the house had "+house);
+            displayCards(cardsDrawn);
+        }
+        else
+        {
+            System.out.println("You have lost with "+total+" because the house had "+house);
+            displayCards(cardsDrawn);
+        }
+        kboard.close();
+
+/*
+        System.out.println("Would you like another card?");
+        choice = kboard.next();
+
+        while (choice.equalsIgnoreCase("y"))
+        {
+            card3 = (int)(Math.random()*10) + 1;
+            System.out.println(card3);
+            total = total + card3;
+            System.out.println("Your total is: "+total);
+            System.out.println("Would you like another card?");
+            choice = kboard.next();
+        }
+
+        if (total>19 && total<=21)
+        {
+            System.out.println("You have won!!");
+        }
+        else
+        {
+            System.out.println("You have lost!");
+        }
+
+*/
+    }
+
+
+} // End of Class
